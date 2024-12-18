@@ -22,6 +22,9 @@ class EnLocalizations extends GiphyGetUILocalizationLabels {
   @override
   final String poweredByGiphy;
 
+  @override
+  final String trendingOnGiphy;
+
   const EnLocalizations({
     this.searchInputLabel = 'Search GIPHY',
     this.emojisLabel = 'Emojis',
@@ -30,5 +33,6 @@ class EnLocalizations extends GiphyGetUILocalizationLabels {
     this.moreBy = 'More by',
     this.viewOnGiphy = 'View on GIPHY',
     this.poweredByGiphy = 'Powered by GIPHY',
+    this.trendingOnGiphy = 'Trending on GIPHY',
   });
 }
