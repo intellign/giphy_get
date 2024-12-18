@@ -33,6 +33,7 @@ abstract class GiphyGetUILocalizationLabels {
   String get gifsLabel;
   String get moreBy;
   String get poweredByGiphy;
+  String get trendingOnGiphy;
   String get searchInputLabel;
   String get stickersLabel;
   String get viewOnGiphy;
