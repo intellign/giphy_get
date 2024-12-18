@@ -14,10 +14,13 @@ class SearchAppBar extends StatefulWidget {
   // Scroll Controller
   final ScrollController scrollController;
   final SearchAppBarBuilder? searchAppBarBuilder;
-
+  final TextEditingController textEditingController;
+  FocusNode focus;
   SearchAppBar({
     Key? key,
     required this.scrollController,
+    required this.textEditingController,
+    required this.focus,
     this.searchAppBarBuilder,
   }) : super(key: key);
 
@@ -35,21 +38,22 @@ class _SearchAppBarState extends State<SearchAppBar> {
   // Sheet Provider
   late SheetProvider _sheetProvider;
 
-  // Input controller
+  /* // Input controller
   late TextEditingController _textEditingController;
 
   // Input Focus
   final FocusNode _focus = new FocusNode();
+  */
 
   @override
   void initState() {
     // Focus
-    _focus.addListener(_focusListener);
+    widget.focus.addListener(_focusListener);
 
     //Set Texfield Controller
-    _textEditingController = new TextEditingController(
+    /*   widget.textEditingController = new TextEditingController(
         text: Provider.of<AppBarProvider>(context, listen: false).queryText);
-
+*/
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Establish the debouncer
       final _debouncer = Debouncer(
@@ -59,10 +63,10 @@ class _SearchAppBarState extends State<SearchAppBar> {
       );
 
       // Listener TextField
-      _textEditingController.addListener(() {
+      widget.textEditingController.addListener(() {
         _debouncer.call(() {
-          if (_appBarProvider.queryText != _textEditingController.text) {
-            _appBarProvider.queryText = _textEditingController.text;
+          if (_appBarProvider.queryText != widget.textEditingController.text) {
+            _appBarProvider.queryText = widget.textEditingController.text;
           }
         });
       });
@@ -86,8 +90,8 @@ class _SearchAppBarState extends State<SearchAppBar> {
 
   @override
   void dispose() {
-    _textEditingController.dispose();
-    _focus.dispose();
+    widget.textEditingController.dispose();
+    widget.focus.dispose();
 
     super.dispose();
   }
@@ -102,33 +106,61 @@ class _SearchAppBarState extends State<SearchAppBar> {
 
   Widget _searchWidget() {
     final l = GiphyGetUILocalizations.labelsOf(context);
-    return Column(
-      children: [
-        _tabProvider.tabType == GiphyType.emoji
-            ? Container()
-            : widget.searchAppBarBuilder?.call(
-                  context,
-                  _focus,
-                  _sheetProvider.initialExtent == SheetProvider.maxExtent,
-                  _textEditingController,
-                  () {
-                    setState(() {
-                      _textEditingController.clear();
-                    });
-                  },
-                ) ??
-                SizedBox(
-                  height: 40,
-                  child: Center(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: TextField(
-                        textAlignVertical: TextAlignVertical.center,
-                        autofocus: _sheetProvider.initialExtent ==
-                            SheetProvider.maxExtent,
-                        focusNode: _focus,
-                        controller: _textEditingController,
-                        decoration: InputDecoration(
+    return Material(
+        elevation: 0,
+        color: Colors.transparent,
+        child: Column(
+          children: [
+            _tabProvider.tabType == GiphyType.emoji
+                ? Container()
+                : widget.searchAppBarBuilder?.call(
+                      context,
+                      widget.focus,
+                      _sheetProvider.initialExtent == SheetProvider.maxExtent,
+                      widget.textEditingController,
+                      () {
+                        setState(() {
+                          widget.textEditingController.clear();
+                        });
+                      },
+                    ) ??
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: TextField(
+                              textAlignVertical: TextAlignVertical.center,
+                              autofocus: _sheetProvider.initialExtent ==
+                                  SheetProvider.maxExtent,
+                              focusNode: widget.focus,
+                              controller: widget.textEditingController,
+                              decoration: InputDecoration(
+                                icon: Icon(
+                                  Icons.search,
+                                  color: Colors.white.withOpacity(0.8),
+                                  size: 30,
+                                ),
+                                suffixIcon: IconButton(
+                                    icon: Icon(
+                                      Icons.clear,
+                                      color: Colors.white54.withOpacity(0.7),
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        widget.textEditingController.clear();
+                                      });
+                                    }),
+                                border: InputBorder.none,
+                                hintText: l.searchInputLabel,
+                                hintStyle: TextStyle(
+                                    color: Colors.white54.withOpacity(0.5),
+                                    fontSize: 22),
+                              ),
+                              style: TextStyle(
+                                  color: Colors.white54.withOpacity(0.7),
+                                  fontSize: 22),
+                              /*     decoration: InputDecoration(
                           isDense: true,
                           filled: true,
                           prefixIcon: _searchIcon(),
@@ -143,7 +175,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
                               ),
                               onPressed: () {
                                 setState(() {
-                                  _textEditingController.clear();
+                                   widget.textEditingController.clear();
                                 });
                               }),
                           focusedBorder: InputBorder.none,
@@ -151,13 +183,15 @@ class _SearchAppBarState extends State<SearchAppBar> {
                           errorBorder: InputBorder.none,
                           disabledBorder: InputBorder.none,
                         ),
-                        autocorrect: false,
-                      ),
+                        */
+                              autocorrect: false,
+                            ),
+                          ),
+                        )
+                      ],
                     ),
-                  ),
-                ),
-      ],
-    );
+          ],
+        ));
   }
 
   Widget _searchIcon() {
@@ -187,7 +221,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
 
   void _focusListener() {
     // Set to max extent height if Textfield has focus
-    if (_focus.hasFocus &&
+    if (widget.focus.hasFocus &&
         _sheetProvider.initialExtent == SheetProvider.minExtent) {
       _sheetProvider.initialExtent = SheetProvider.maxExtent;
     }
