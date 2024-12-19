@@ -169,7 +169,15 @@ class _GiphyTabDetailState extends State<GiphyTabDetail> {
                             LoadState.loading: AspectRatio(
                               aspectRatio: _aspectRatio,
                               child: Container(
-                                color: Theme.of(context).cardColor,
+                                alignment: Alignment.center,
+                                color: Colors.transparent,
+                                height: 30,
+                                width: 30,
+                                child: const CircularProgressIndicator(
+                                  valueColor:
+                                      AlwaysStoppedAnimation(Colors.white54),
+                                  strokeWidth: 1,
+                                ),
                               ),
                             ),
                             LoadState.completed: AspectRatio(
@@ -254,7 +262,20 @@ class _GiphyTabDetailState extends State<GiphyTabDetail> {
 
   // Scroll listener. if scroll end load more gifs
   void _scrollListener() {
-    if (widget.scrollController.positions.last.extentAfter.lessThan(500) &&
+    double showoffset =
+        10.0; //Back to top botton will show on scroll offset 10.0
+
+    if (widget.scrollController.offset > showoffset) {
+      if (_tabProvider.showAddTopMediaWidgets) {
+        _tabProvider.setShowAddTopMediaWidgets(false);
+      }
+    } else {
+      if (!_tabProvider.showAddTopMediaWidgets) {
+        _tabProvider.setShowAddTopMediaWidgets(true);
+      }
+    }
+
+    if ((widget.scrollController.positions.last.extentAfter.lessThan(500)) &&
         !_isLoading) {
       _loadMore();
     }
