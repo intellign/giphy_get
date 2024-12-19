@@ -23,6 +23,7 @@ export 'package:giphy_get/src/client/models/type.dart';
 export 'package:giphy_get/src/client/models/user.dart';
 export 'package:giphy_get/src/widgets/giphy_get.widget.dart';
 export 'package:giphy_get/src/widgets/giphy_gif.widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 typedef TabTopBuilder = Widget Function(BuildContext context);
 typedef TabBottomBuilder = Widget Function(BuildContext context);
@@ -55,20 +56,26 @@ class GiphyGet {
     TabTopBuilder? tapTopBuilder,
     TabBottomBuilder? tabBottomBuilder,
     SearchAppBarBuilder? searchAppBarBuilder,
-  }) {
+    Widget? addMediaTopWidget,
+    Color? topDragColor,
+  }) async {
     if (apiKey == "") {
       throw Exception("apiKey must be not null or not empty");
     }
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     return showModalBottomSheet<GiphyGif>(
-      clipBehavior: Clip.antiAlias,
+      barrierColor: Colors.transparent,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      /*  clipBehavior: Clip.antiAlias,
       shape: Theme.of(context).bottomSheetTheme.shape ??
           RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
               top: Radius.circular(10.0),
             ),
           ),
-      isScrollControlled: true,
+          */
       context: context,
       builder: (ctx) => MultiProvider(
         providers: [
@@ -83,28 +90,30 @@ class GiphyGet {
           ),
           ChangeNotifierProvider(
             create: (ctx) => TabProvider(
+              isUsingAddTopMediaWidgets: addMediaTopWidget != null,
               apiKey: apiKey,
               randomID: randomID,
               tabColor: tabColor ?? Theme.of(context).colorScheme.secondary,
-              textSelectedColor: textSelectedColor ??
-                  Theme.of(context).textTheme.titleSmall?.color,
-              textUnselectedColor: textUnselectedColor ??
-                  Theme.of(context).textTheme.bodySmall?.color,
+              textSelectedColor:
+                  textSelectedColor ?? Colors.white54.withOpacity(0.77),
+              textUnselectedColor:
+                  textUnselectedColor ?? Colors.white54.withOpacity(0.5),
               searchText: searchText,
               rating: rating,
               lang: lang,
             ),
           )
         ],
-        child: SafeArea(
-          child: MainView(
-            showGIFs: showGIFs,
-            showStickers: showStickers,
-            showEmojis: showEmojis,
-            tabTopBuilder: tapTopBuilder,
-            tabBottomBuilder: tabBottomBuilder,
-            searchAppBarBuilder: searchAppBarBuilder,
-          ),
+        child: MainView(
+          sharedPreferences: sharedPreferences,
+          showGIFs: showGIFs,
+          showStickers: showStickers,
+          showEmojis: showEmojis,
+          tabTopBuilder: tapTopBuilder,
+          tabBottomBuilder: tabBottomBuilder,
+          searchAppBarBuilder: searchAppBarBuilder,
+          topDragColor: topDragColor,
+          addMediaTopWidget: addMediaTopWidget,
         ),
       ),
     );
