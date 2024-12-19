@@ -3,6 +3,8 @@ import 'package:giphy_get/src/client/models/languages.dart';
 import 'package:giphy_get/src/client/models/rating.dart';
 
 class TabProvider with ChangeNotifier {
+  bool isUsingAddTopMediaWidgets;
+  bool showAddTopMediaWidgets;
   String apiKey;
   Color? tabColor;
   Color? textSelectedColor;
@@ -21,6 +23,8 @@ class TabProvider with ChangeNotifier {
 
   TabProvider({
     required this.apiKey,
+    this.isUsingAddTopMediaWidgets = false,
+    this.showAddTopMediaWidgets = false,
     this.tabColor,
     this.textSelectedColor,
     this.textUnselectedColor,
@@ -30,8 +34,13 @@ class TabProvider with ChangeNotifier {
     required this.lang,
   });
 
-  void setTabColor(Color tabColor) {
-    tabColor = tabColor;
+  void setTabColor(Color tabColor0) {
+    tabColor = tabColor0;
+    notifyListeners();
+  }
+
+  void setShowAddTopMediaWidgets(bool state) {
+    showAddTopMediaWidgets = state;
     notifyListeners();
   }
 }
