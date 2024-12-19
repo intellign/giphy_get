@@ -4,7 +4,7 @@ import 'package:giphy_get/src/client/models/user.dart';
 class GiphyGif {
   String? title;
   String? type;
-  String? id;
+  String id;
   String? slug;
   String? url;
   String? bitlyGifUrl;
@@ -23,25 +23,25 @@ class GiphyGif {
   GiphyImages? images;
 
   GiphyGif({
-    required this.title,
-    required this.type,
+    this.title,
+    this.type,
     required this.id,
-    required this.slug,
-    required this.url,
-    required this.bitlyGifUrl,
-    required this.bitlyUrl,
-    required this.embedUrl,
-    required this.username,
-    required this.source,
-    required this.rating,
-    required this.contentUrl,
-    required this.sourceTld,
-    required this.sourcePostUrl,
-    required this.isSticker,
-    required this.importDatetime,
-    required this.trendingDatetime,
-    required this.user,
-    required this.images,
+    this.slug,
+    this.url,
+    this.bitlyGifUrl,
+    this.bitlyUrl,
+    this.embedUrl,
+    this.username,
+    this.source,
+    this.rating,
+    this.contentUrl,
+    this.sourceTld,
+    this.sourcePostUrl,
+    this.isSticker,
+    this.importDatetime,
+    this.trendingDatetime,
+    this.user,
+    this.images,
   });
 
   factory GiphyGif.fromJson(Map<String, dynamic> json) => GiphyGif(
