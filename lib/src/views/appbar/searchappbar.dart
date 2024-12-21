@@ -15,8 +15,8 @@ class SearchAppBar extends StatefulWidget {
   final ScrollController scrollController;
   final SearchAppBarBuilder? searchAppBarBuilder;
   final TextEditingController textEditingController;
-  FocusNode focus;
-  SearchAppBar({
+  final FocusNode focus;
+  const SearchAppBar({
     Key? key,
     required this.scrollController,
     required this.textEditingController,
@@ -90,16 +90,16 @@ class _SearchAppBarState extends State<SearchAppBar> {
 
   @override
   void dispose() {
+    // Dispose of resources properly
     widget.textEditingController.dispose();
     widget.focus.dispose();
-
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 8, right: 8, bottom: 10),
+      padding: const EdgeInsets.only(left: 8, right: 8, bottom: 10),
       child: _searchWidget(),
     );
   }
