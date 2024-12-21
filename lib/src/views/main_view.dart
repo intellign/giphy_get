@@ -14,7 +14,7 @@ import 'package:giphy_get/src/providers/tab_provider.dart';
 import 'package:flutter/rendering.dart';
 
 class MainView extends StatefulWidget {
-  MainView({
+  const MainView({
     Key? key,
     required this.sharedPreferences,
     this.showEmojis = true,
@@ -100,8 +100,9 @@ class _MainViewState extends State<MainView>
 
   @override
   void dispose() {
-    super.dispose();
+    // Dispose of resources properly
     widget.sharedPreferences.setInt("lastGiphyTabSaved", _tabController.index);
+    super.dispose();
   }
 
   @override
@@ -126,9 +127,45 @@ class _MainViewState extends State<MainView>
                 return _bottomSheetBody();
               })));
 
-  Widget _bottomSheetBody() {
+  Widget GestureWidget(
+      {required Widget child, required TabProvider tabProvider}) {
     DragStartDetails? startVerticalDragDetails;
     DragUpdateDetails? updateVerticalDragDetails;
+    return GestureDetector(
+        onVerticalDragStart: (dragDetails) {
+          startVerticalDragDetails = dragDetails;
+        },
+        onVerticalDragUpdate: (dragDetails) {
+          updateVerticalDragDetails = dragDetails;
+        },
+        onVerticalDragEnd: (endDetails) {
+          if (startVerticalDragDetails != null &&
+              updateVerticalDragDetails != null) {
+            double dx = updateVerticalDragDetails!.globalPosition.dx -
+                startVerticalDragDetails!.globalPosition.dx;
+            double dy = updateVerticalDragDetails!.globalPosition.dy -
+                startVerticalDragDetails!.globalPosition.dy;
+            double? velocity = endDetails.primaryVelocity;
+
+            //Convert values to be positive
+            if (dx < 0) dx = -dx;
+            if (dy < 0) dy = -dy;
+
+            if (velocity != null && velocity < 0) {
+              //scroll up
+              if (widget.addMediaTopWidget != null &&
+                  tabProvider.showAddTopMediaWidgets)
+                tabProvider.setShowAddTopMediaWidgets(false);
+            } else {
+              //scroll down
+              //   print("yyyyyyyyyy");
+            }
+          }
+        },
+        child: child);
+  }
+
+  Widget _bottomSheetBody() {
     return Center(
         child: Container(
             decoration: BoxDecoration(
@@ -194,52 +231,8 @@ class _MainViewState extends State<MainView>
                                         ? null
                                         : 0,
                                     child: tabProvider.showAddTopMediaWidgets
-                                        ? GestureDetector(
-                                            onVerticalDragStart: (dragDetails) {
-                                              startVerticalDragDetails =
-                                                  dragDetails;
-                                            },
-                                            onVerticalDragUpdate:
-                                                (dragDetails) {
-                                              updateVerticalDragDetails =
-                                                  dragDetails;
-                                            },
-                                            onVerticalDragEnd: (endDetails) {
-                                              if (startVerticalDragDetails !=
-                                                      null &&
-                                                  updateVerticalDragDetails !=
-                                                      null) {
-                                                double dx =
-                                                    updateVerticalDragDetails!
-                                                            .globalPosition.dx -
-                                                        startVerticalDragDetails!
-                                                            .globalPosition.dx;
-                                                double dy =
-                                                    updateVerticalDragDetails!
-                                                            .globalPosition.dy -
-                                                        startVerticalDragDetails!
-                                                            .globalPosition.dy;
-                                                double? velocity =
-                                                    endDetails.primaryVelocity;
-
-                                                //Convert values to be positive
-                                                if (dx < 0) dx = -dx;
-                                                if (dy < 0) dy = -dy;
-
-                                                if (velocity != null &&
-                                                    velocity < 0) {
-                                                  //scroll up
-                                                  if (tabProvider
-                                                      .showAddTopMediaWidgets)
-                                                    tabProvider
-                                                        .setShowAddTopMediaWidgets(
-                                                            false);
-                                                } else {
-                                                  //scroll down
-                                                  //   print("yyyyyyyyyy");
-                                                }
-                                              }
-                                            },
+                                        ? GestureWidget(
+                                            tabProvider: tabProvider,
                                             child: Container(
                                                 margin: EdgeInsets.only(
                                                     top: 17, bottom: 20),
@@ -250,8 +243,13 @@ class _MainViewState extends State<MainView>
                                 return SizedBox();
                               }
                             }),
-                            widget.tabBottomBuilder?.call(context) ??
-                                GiphyTabBottom(),
+                            Consumer<TabProvider>(
+                                builder: (tabProviderContext, tabProvider, _) =>
+                                    GestureWidget(
+                                        tabProvider: tabProvider,
+                                        child: widget.tabBottomBuilder
+                                                ?.call(context) ??
+                                            GiphyTabBottom())),
                             GiphyTabBar(
                               tabController: _tabController,
                               showGIFs: widget.showGIFs,
