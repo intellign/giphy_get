@@ -12,7 +12,8 @@ import 'package:provider/provider.dart';
 class GiphyTabDetail extends StatefulWidget {
   final String type;
   final ScrollController scrollController;
-  GiphyTabDetail({Key? key, required this.type, required this.scrollController})
+  const GiphyTabDetail(
+      {Key? key, required this.type, required this.scrollController})
       : super(key: key);
 
   @override
@@ -112,8 +113,7 @@ class _GiphyTabDetailState extends State<GiphyTabDetail> {
 
   @override
   void dispose() {
-    // dispose listener
-    // Important
+    // Dispose of resources properly
     widget.scrollController.removeListener(_scrollListener);
     _appBarProvider.removeListener(_listenerQuery);
     super.dispose();
@@ -122,13 +122,14 @@ class _GiphyTabDetailState extends State<GiphyTabDetail> {
   @override
   Widget build(BuildContext context) {
     if (_list.isEmpty) {
-      return Center(
+      return const Center(
         child: CircularProgressIndicator(),
       );
     }
 
     return MasonryGridView.count(
-      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      addAutomaticKeepAlives: true,
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
       scrollDirection: _scrollDirection,
       controller: widget.scrollController,
       itemCount: _list.length,
@@ -158,7 +159,7 @@ class _GiphyTabDetailState extends State<GiphyTabDetail> {
                 cache: true,
                 gaplessPlayback: true,
                 fit: BoxFit.fill,
-                headers: {'accept': 'image/*'},
+                headers: const {'accept': 'image/*'},
                 loadStateChanged: (state) => AnimatedSwitcher(
                   duration: const Duration(milliseconds: 350),
                   child: gif.images == null
