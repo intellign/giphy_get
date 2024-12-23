@@ -167,105 +167,99 @@ class _MainViewState extends State<MainView>
 
   Widget _bottomSheetBody() {
     return Center(
-        child: Container(
-            decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
-                    topRight: Radius.circular(16),
-                    topLeft: Radius.circular(16)),
-                boxShadow: [
-                  BoxShadow(
-                      blurRadius: 10,
-                      spreadRadius: 16,
-                      color: widget.whiteBackground
-                          ? Colors.white.withOpacity(0.21)
-                          : Colors.black.withOpacity(0.3),
-                      offset: const Offset(0, 16))
-                ]),
-            child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                    topRight: Radius.circular(16),
-                    topLeft: Radius.circular(16)),
-                child: BackdropFilter(
-                    filter: ui.ImageFilter.blur(
-                      sigmaX: 40.0,
-                      sigmaY: 40.0,
-                    ),
-                    child: Container(
-                        decoration: BoxDecoration(
-                            color: widget.whiteBackground
-                                ? Colors.white.withOpacity(0.27)
-                                : Colors.black.withOpacity(0.5),
-                            borderRadius: const BorderRadius.only(
-                                topRight: Radius.circular(16),
-                                topLeft: Radius.circular(16)),
-                            border: Border.all(
-                              width: 1.5,
-                              color: Colors.transparent,
-                            )),
-                        child: Center(
-                            child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            widget.tabTopBuilder?.call(context) ??
-                                GiphyTabTop(topDragColor: widget.topDragColor),
-                            SizedBox(
-                              height: 13,
-                            ),
-                            SearchAppBar(
-                              scrollController: this._scrollController,
-                              searchAppBarBuilder: widget.searchAppBarBuilder,
-                              textEditingController: textEditingController,
-                              focus: _focusNode,
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Consumer<TabProvider>(
-                                builder: (tabProviderContext, tabProvider, _) {
-                              if (widget.addMediaTopWidget != null &&
-                                  textEditingController.text.isEmpty &&
-                                  !_focusNode.hasFocus) {
-                                return AnimatedContainer(
-                                    duration: Duration(milliseconds: 310),
-                                    height: tabProvider.showAddTopMediaWidgets
-                                        ? null
-                                        : 0,
-                                    child: tabProvider.showAddTopMediaWidgets
-                                        ? GestureWidget(
-                                            tabProvider: tabProvider,
-                                            child: Container(
-                                                margin: EdgeInsets.only(
-                                                    top: 17, bottom: 20),
-                                                child:
-                                                    widget.addMediaTopWidget))
-                                        : SizedBox());
-                              } else {
-                                return SizedBox();
-                              }
-                            }),
-                            Consumer<TabProvider>(
-                                builder: (tabProviderContext, tabProvider, _) =>
-                                    GestureWidget(
-                                        tabProvider: tabProvider,
-                                        child: widget.tabBottomBuilder
-                                                ?.call(context) ??
-                                            GiphyTabBottom())),
-                            GiphyTabBar(
-                              tabController: _tabController,
-                              showGIFs: widget.showGIFs,
-                              showStickers: widget.showStickers,
-                              showEmojis: widget.showEmojis,
-                            ),
-                            Expanded(
-                              child: GiphyTabView(
-                                tabController: _tabController,
-                                scrollController: this._scrollController,
-                                showGIFs: widget.showGIFs,
-                                showStickers: widget.showStickers,
-                                showEmojis: widget.showEmojis,
-                              ),
-                            ),
-                          ],
-                        )))))));
+        child: Stack(children: [
+      Container(
+          decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                  topRight: Radius.circular(16), topLeft: Radius.circular(16)),
+              boxShadow: [
+                BoxShadow(
+                    blurRadius: 10,
+                    spreadRadius: 16,
+                    color: widget.whiteBackground
+                        ? Colors.white.withOpacity(0.21)
+                        : Colors.black.withOpacity(0.3),
+                    offset: const Offset(0, 16))
+              ]),
+          child: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                  topRight: Radius.circular(16), topLeft: Radius.circular(16)),
+              child: BackdropFilter(
+                  filter: ui.ImageFilter.blur(
+                    sigmaX: 10.0,
+                    sigmaY: 10.0,
+                  ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: widget.whiteBackground
+                            ? Colors.white.withOpacity(0.27)
+                            : Colors.black.withOpacity(0.5),
+                        borderRadius: const BorderRadius.only(
+                            topRight: Radius.circular(16),
+                            topLeft: Radius.circular(16)),
+                        border: Border.all(
+                          width: 1.5,
+                          color: Colors.transparent,
+                        )),
+                  )))),
+      Center(
+          child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          widget.tabTopBuilder?.call(context) ??
+              GiphyTabTop(topDragColor: widget.topDragColor),
+          SizedBox(
+            height: 13,
+          ),
+          SearchAppBar(
+            scrollController: this._scrollController,
+            searchAppBarBuilder: widget.searchAppBarBuilder,
+            textEditingController: textEditingController,
+            focus: _focusNode,
+          ),
+          SizedBox(
+            height: 3.7,
+          ),
+          Consumer<TabProvider>(builder: (tabProviderContext, tabProvider, _) {
+            if (widget.addMediaTopWidget != null &&
+                textEditingController.text.isEmpty &&
+                !_focusNode.hasFocus) {
+              return AnimatedContainer(
+                  duration: Duration(seconds: 2),
+                  height: tabProvider.showAddTopMediaWidgets ? null : 0,
+                  child: tabProvider.showAddTopMediaWidgets
+                      ? GestureWidget(
+                          tabProvider: tabProvider,
+                          child: Container(
+                              margin: EdgeInsets.only(top: 17, bottom: 20),
+                              child: widget.addMediaTopWidget))
+                      : SizedBox());
+            } else {
+              return SizedBox();
+            }
+          }),
+          Consumer<TabProvider>(
+              builder: (tabProviderContext, tabProvider, _) => GestureWidget(
+                  tabProvider: tabProvider,
+                  child: widget.tabBottomBuilder?.call(context) ??
+                      GiphyTabBottom())),
+          GiphyTabBar(
+            tabController: _tabController,
+            showGIFs: widget.showGIFs,
+            showStickers: widget.showStickers,
+            showEmojis: widget.showEmojis,
+          ),
+          Expanded(
+            child: GiphyTabView(
+              tabController: _tabController,
+              scrollController: this._scrollController,
+              showGIFs: widget.showGIFs,
+              showStickers: widget.showStickers,
+              showEmojis: widget.showEmojis,
+            ),
+          ),
+        ],
+      ))
+    ]));
   }
 }
