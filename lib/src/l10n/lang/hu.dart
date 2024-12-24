@@ -22,13 +22,17 @@ class HuLocalizations extends GiphyGetUILocalizationLabels {
   @override
   final String poweredByGiphy;
 
+  @override
+  final String trendingOnGiphy;
+
   const HuLocalizations({
-    this.searchInputLabel = 'GIPHY keresés',
+    this.searchInputLabel = 'Keresés',
     this.emojisLabel = 'Emojik',
     this.gifsLabel = 'GIFek',
     this.stickersLabel = 'Matricák',
     this.moreBy = 'Több általa:',
     this.viewOnGiphy = 'Megtekintés GIPHY-n',
     this.poweredByGiphy = 'Powered by GIPHY',
+    this.trendingOnGiphy = 'Trending on GIPHY',
   });
 }

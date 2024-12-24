@@ -22,13 +22,17 @@ class DaLocalizations extends GiphyGetUILocalizationLabels {
   @override
   final String poweredByGiphy;
 
+  @override
+  final String trendingOnGiphy;
+
   const DaLocalizations({
-    this.searchInputLabel = 'Søg GIPHY',
+    this.searchInputLabel = 'Søg',
     this.emojisLabel = 'Emojis',
     this.gifsLabel = 'GIFs',
     this.stickersLabel = 'Klistremærker',
     this.moreBy = 'Flere fra',
     this.viewOnGiphy = 'Se på GIPHY',
     this.poweredByGiphy = 'Powered by GIPHY',
+    this.trendingOnGiphy = 'Trending på GIPHY',
   });
 }

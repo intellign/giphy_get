@@ -22,13 +22,17 @@ class TrLocalizations extends GiphyGetUILocalizationLabels {
   @override
   final String poweredByGiphy;
 
+  @override
+  final String trendingOnGiphy;
+
   const TrLocalizations({
-    this.searchInputLabel = 'GIPHY\'i ara',
+    this.searchInputLabel = 'Aramak',
     this.emojisLabel = 'Emojiler',
     this.gifsLabel = 'GIFler',
     this.stickersLabel = 'Stickerler',
     this.moreBy = 'Daha fazla',
     this.viewOnGiphy = 'GIPHY\'de gör',
     this.poweredByGiphy = 'Powered by GIPHY',
+    this.trendingOnGiphy = 'GIPHY\'de Trendler',
   });
 }

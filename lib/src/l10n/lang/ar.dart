@@ -22,13 +22,17 @@ class ArLocalizations extends GiphyGetUILocalizationLabels {
   @override
   final String poweredByGiphy;
 
+  @override
+  final String trendingOnGiphy;
+
   const ArLocalizations({
-    this.searchInputLabel = 'بحث GIPHY',
+    this.searchInputLabel = 'بحث',
     this.emojisLabel = 'الرموز التعبيرية',
     this.gifsLabel = 'صور متحركة',
     this.stickersLabel = 'ملصقات',
     this.moreBy = 'المزيد من',
     this.viewOnGiphy = 'عرض على GIPHY',
     this.poweredByGiphy = 'مدعوم بواسطة GIPHY',
+    this.trendingOnGiphy = 'تتجه على GIPHY',
   });
 }

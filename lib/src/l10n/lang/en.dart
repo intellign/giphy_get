@@ -26,7 +26,7 @@ class EnLocalizations extends GiphyGetUILocalizationLabels {
   final String trendingOnGiphy;
 
   const EnLocalizations({
-    this.searchInputLabel = 'Search GIPHY',
+    this.searchInputLabel = 'Search',
     this.emojisLabel = 'Emojis',
     this.gifsLabel = 'GIFs',
     this.stickersLabel = 'Stickers',

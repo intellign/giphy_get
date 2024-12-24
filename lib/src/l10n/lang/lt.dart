@@ -22,13 +22,17 @@ class LtLocalizations extends GiphyGetUILocalizationLabels {
   @override
   final String poweredByGiphy;
 
+  @override
+  final String trendingOnGiphy;
+
   const LtLocalizations({
-    this.searchInputLabel = 'Ieškoti GIPHY',
+    this.searchInputLabel = 'Ieškoti',
     this.emojisLabel = 'Jaustukai',
     this.gifsLabel = 'GIFai',
     this.stickersLabel = 'Lipdukai',
     this.moreBy = 'Daugiau iš',
     this.viewOnGiphy = 'Peržiūrėti GIPHY',
     this.poweredByGiphy = 'Veikia per GIPHY',
+    this.trendingOnGiphy = 'Populiariausi GIPHY',
   });
 }

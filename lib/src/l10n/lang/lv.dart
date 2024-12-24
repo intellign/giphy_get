@@ -22,13 +22,17 @@ class LvLocalizations extends GiphyGetUILocalizationLabels {
   @override
   final String poweredByGiphy;
 
+  @override
+  final String trendingOnGiphy;
+
   const LvLocalizations({
-    this.searchInputLabel = 'Meklēt GIPHY',
+    this.searchInputLabel = 'Meklēt',
     this.emojisLabel = 'Emoji',
     this.gifsLabel = 'GIF’i',
     this.stickersLabel = 'Stikeri',
     this.moreBy = 'Vairāk no',
     this.viewOnGiphy = 'Apskatīt GIPHY',
     this.poweredByGiphy = 'Nodrošina GIPHY',
+    this.trendingOnGiphy = 'Populāri GIPHY',
   });
 }

@@ -1,6 +1,6 @@
 import '../default_localizations.dart';
 
-class EsLocalizations extends GiphyGetUILocalizationLabels{
+class EsLocalizations extends GiphyGetUILocalizationLabels {
   @override
   final String searchInputLabel;
 
@@ -14,22 +14,25 @@ class EsLocalizations extends GiphyGetUILocalizationLabels{
   final String stickersLabel;
 
   @override
-  final String  moreBy;
+  final String moreBy;
 
   @override
-  final String  viewOnGiphy;
+  final String viewOnGiphy;
 
   @override
   final String poweredByGiphy;
 
+  @override
+  final String trendingOnGiphy;
+
   const EsLocalizations({
-    this.searchInputLabel = 'Buscar GIPHY',
+    this.searchInputLabel = 'Buscar',
     this.emojisLabel = 'Emojis',
     this.gifsLabel = 'Gifs',
     this.stickersLabel = 'Stickers',
     this.moreBy = 'Más de',
     this.viewOnGiphy = 'Ver en GIPHY',
     this.poweredByGiphy = 'Potenciado por GIPHY',
+    this.trendingOnGiphy = 'Tendencias en GIPHY',
   });
-
 }

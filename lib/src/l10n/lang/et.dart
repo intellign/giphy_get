@@ -22,13 +22,17 @@ class EtLocalizations extends GiphyGetUILocalizationLabels {
   @override
   final String poweredByGiphy;
 
+  @override
+  final String trendingOnGiphy;
+
   const EtLocalizations({
-    this.searchInputLabel = 'Otsi GIPHY',
+    this.searchInputLabel = 'Otsi',
     this.emojisLabel = 'Emotikonid',
     this.gifsLabel = 'GIF-id’',
     this.stickersLabel = 'Kleepsud',
     this.moreBy = 'Vaata veel',
     this.viewOnGiphy = 'Vaata GIPHY',
     this.poweredByGiphy = 'Platvorm GIPHY',
+    this.trendingOnGiphy = 'Trendid GIPHY',
   });
 }

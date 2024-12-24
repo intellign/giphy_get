@@ -20,14 +20,18 @@ class FrLocalizations extends GiphyGetUILocalizationLabels {
   final String stickersLabel;
 
   @override
+  final String trendingOnGiphy;
+
+  @override
   final String viewOnGiphy;
   const FrLocalizations({
-    this.searchInputLabel = 'Recherche GIPHY',
+    this.searchInputLabel = 'Recherche',
     this.emojisLabel = 'Emojis',
     this.gifsLabel = 'GIFs',
     this.stickersLabel = 'Stickers',
     this.moreBy = 'Plus de',
     this.viewOnGiphy = 'Voir sur GIPHY',
     this.poweredByGiphy = 'Powered by GIPHY',
+    this.trendingOnGiphy = 'Tendance sur GIPHY',
   });
 }
