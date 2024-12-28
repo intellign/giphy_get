@@ -129,6 +129,7 @@ class _GiphyTabDetailState extends State<GiphyTabDetail> {
 
     return MasonryGridView.count(
       addAutomaticKeepAlives: true,
+      physics: const ClampingScrollPhysics(), // Ensure proper scroll physics,
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       scrollDirection: _scrollDirection,
       controller: widget.scrollController,
@@ -265,16 +266,6 @@ class _GiphyTabDetailState extends State<GiphyTabDetail> {
   void _scrollListener() {
     double showoffset =
         10.0; //Back to top botton will show on scroll offset 10.0
-
-    if (widget.scrollController.offset > showoffset) {
-      if (_tabProvider.showAddTopMediaWidgets) {
-        _tabProvider.setShowAddTopMediaWidgets(false);
-      }
-    } else {
-      if (!_tabProvider.showAddTopMediaWidgets) {
-        _tabProvider.setShowAddTopMediaWidgets(true);
-      }
-    }
 
     if ((widget.scrollController.positions.last.extentAfter.lessThan(500)) &&
         !_isLoading) {
