@@ -83,11 +83,7 @@ class _MainViewState extends State<MainView>
       vsync: this,
     );
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      final _tabProvider = Provider.of<TabProvider>(context, listen: false);
-
-      if (widget.addMediaTopWidget != null) {
-        _tabProvider.setShowAddTopMediaWidgets(true);
-      }
+      // final _tabProvider = Provider.of<TabProvider>(context, listen: false);
     });
   }
 
@@ -167,99 +163,118 @@ class _MainViewState extends State<MainView>
 
   Widget _bottomSheetBody() {
     return Center(
-        child: Stack(children: [
-      Container(
-          decoration: BoxDecoration(
+      child: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
               borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(16), topLeft: Radius.circular(16)),
+                topRight: Radius.circular(16),
+                topLeft: Radius.circular(16),
+              ),
               boxShadow: [
                 BoxShadow(
-                    blurRadius: 10,
-                    spreadRadius: 16,
-                    color: widget.whiteBackground
-                        ? Colors.white.withOpacity(0.21)
-                        : Colors.black.withOpacity(0.3),
-                    offset: const Offset(0, 16))
-              ]),
-          child: ClipRRect(
+                  blurRadius: 10,
+                  spreadRadius: 16,
+                  color: widget.whiteBackground
+                      ? Colors.white.withOpacity(0.21)
+                      : Colors.black.withOpacity(0.3),
+                  offset: const Offset(0, 16),
+                ),
+              ],
+            ),
+            child: ClipRRect(
               borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(16), topLeft: Radius.circular(16)),
+                topRight: Radius.circular(16),
+                topLeft: Radius.circular(16),
+              ),
               child: BackdropFilter(
-                  filter: ui.ImageFilter.blur(
-                    sigmaX: 10.0,
-                    sigmaY: 10.0,
+                filter: ui.ImageFilter.blur(
+                  sigmaX: 10.0,
+                  sigmaY: 10.0,
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: widget.whiteBackground
+                        ? Colors.white.withOpacity(0.27)
+                        : Colors.black.withOpacity(0.5),
+                    borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(16),
+                      topLeft: Radius.circular(16),
+                    ),
+                    border: Border.all(
+                      width: 1.5,
+                      color: Colors.transparent,
+                    ),
                   ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: widget.whiteBackground
-                            ? Colors.white.withOpacity(0.27)
-                            : Colors.black.withOpacity(0.5),
-                        borderRadius: const BorderRadius.only(
-                            topRight: Radius.circular(16),
-                            topLeft: Radius.circular(16)),
-                        border: Border.all(
-                          width: 1.5,
-                          color: Colors.transparent,
-                        )),
-                  )))),
-      Center(
-          child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          widget.tabTopBuilder?.call(context) ??
-              GiphyTabTop(topDragColor: widget.topDragColor),
-          SizedBox(
-            height: 13,
+                ),
+              ),
+            ),
           ),
-          SearchAppBar(
-            scrollController: this._scrollController,
-            searchAppBarBuilder: widget.searchAppBarBuilder,
-            textEditingController: textEditingController,
-            focus: _focusNode,
-          ),
-          SizedBox(
-            height: 3.7,
-          ),
-          Consumer<TabProvider>(builder: (tabProviderContext, tabProvider, _) {
-            if (widget.addMediaTopWidget != null &&
-                textEditingController.text.isEmpty &&
-                !_focusNode.hasFocus) {
-              return AnimatedContainer(
-                  duration: Duration(seconds: 2),
-                  height: tabProvider.showAddTopMediaWidgets ? null : 0,
-                  child: tabProvider.showAddTopMediaWidgets
-                      ? GestureWidget(
-                          tabProvider: tabProvider,
+          Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                widget.tabTopBuilder?.call(context) ??
+                    GiphyTabTop(topDragColor: widget.topDragColor),
+                SizedBox(height: 13),
+                SearchAppBar(
+                  scrollController: this._scrollController,
+                  searchAppBarBuilder: widget.searchAppBarBuilder,
+                  textEditingController: textEditingController,
+                  focus: _focusNode,
+                ),
+                SizedBox(height: 3.7),
+                Expanded(
+                  child: NestedScrollView(
+                    controller: _scrollController,
+                    floatHeaderSlivers: true,
+                    headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                      SliverToBoxAdapter(
                           child: Container(
-                              margin: EdgeInsets.only(top: 17, bottom: 20),
-                              child: widget.addMediaTopWidget))
-                      : SizedBox());
-            } else {
-              return SizedBox();
-            }
-          }),
-          Consumer<TabProvider>(
-              builder: (tabProviderContext, tabProvider, _) => GestureWidget(
-                  tabProvider: tabProvider,
-                  child: widget.tabBottomBuilder?.call(context) ??
-                      GiphyTabBottom())),
-          GiphyTabBar(
-            tabController: _tabController,
-            showGIFs: widget.showGIFs,
-            showStickers: widget.showStickers,
-            showEmojis: widget.showEmojis,
-          ),
-          Expanded(
-            child: GiphyTabView(
-              tabController: _tabController,
-              scrollController: this._scrollController,
-              showGIFs: widget.showGIFs,
-              showStickers: widget.showStickers,
-              showEmojis: widget.showEmojis,
+                              // duration: const Duration(milliseconds: 310),
+                              child: Column(children: [
+                        if (widget.addMediaTopWidget != null &&
+                            textEditingController.text.isEmpty)
+                          widget.addMediaTopWidget!,
+                        widget.tabBottomBuilder?.call(context) ??
+                            GiphyTabBottom(),
+                        GiphyTabBar(
+                          tabController: _tabController,
+                          showGIFs: widget.showGIFs,
+                          showStickers: widget.showStickers,
+                          showEmojis: widget.showEmojis,
+                        ),
+                      ])))
+                    ],
+                    body:
+                        /* NotificationListener<ScrollNotification>(
+                      onNotification: (scrollNotification) {
+                        if (scrollNotification is ScrollEndNotification) {
+                          if (_scrollController.position.extentAfter == 0) {
+                            print("bottommmmmmmmmmmmmm");
+                            // User has scrolled to the bottom of the list
+                            // Handle the event here
+                          }
+                        }
+                        return false;
+                      },
+                      child:
+                      */
+                        GiphyTabView(
+                      tabController: _tabController,
+                      scrollController: _scrollController,
+                      showGIFs: widget.showGIFs,
+                      showStickers: widget.showStickers,
+                      showEmojis: widget.showEmojis,
+                    ),
+                    // ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
-      ))
-    ]));
+      ),
+    );
   }
 }
