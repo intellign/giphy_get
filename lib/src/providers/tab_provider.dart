@@ -44,3 +44,17 @@ class TabProvider with ChangeNotifier {
     notifyListeners();
   }
 }
+
+class ScrollingProvider extends ChangeNotifier {
+  bool showScrollbtn = false;
+
+  /// true if scrolled to top, null if user hasn't scrolled yet
+  bool? scrolledToTop;
+
+  void updateScrolling(bool state) {
+    showScrollbtn = state;
+    scrolledToTop = !state;
+
+    notifyListeners();
+  }
+}
