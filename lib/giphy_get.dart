@@ -89,6 +89,9 @@ class GiphyGet {
             create: (ctx) => SheetProvider(),
           ),
           ChangeNotifierProvider(
+            create: (ctx) => ScrollingProvider(),
+          ),
+          ChangeNotifierProvider(
             create: (ctx) => TabProvider(
               isUsingAddTopMediaWidgets: addMediaTopWidget != null,
               apiKey: apiKey,
