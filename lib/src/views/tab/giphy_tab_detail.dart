@@ -24,6 +24,9 @@ class _GiphyTabDetailState extends State<GiphyTabDetail> {
   // Tab Provider
   late TabProvider _tabProvider;
 
+  //scrollingProvider
+  late ScrollingProvider _scrollingProvider;
+
   // AppBar Provider
   late AppBarProvider _appBarProvider;
 
@@ -60,6 +63,9 @@ class _GiphyTabDetailState extends State<GiphyTabDetail> {
 
     // Tab Provider
     _tabProvider = Provider.of<TabProvider>(context, listen: false);
+
+    // Scrolling Provider
+    _scrollingProvider = Provider.of<ScrollingProvider>(context, listen: false);
 
     // AppBar Provider
     _appBarProvider = Provider.of<AppBarProvider>(context, listen: false);
@@ -264,12 +270,29 @@ class _GiphyTabDetailState extends State<GiphyTabDetail> {
 
   // Scroll listener. if scroll end load more gifs
   void _scrollListener() {
-    double showoffset =
-        10.0; //Back to top botton will show on scroll offset 10.0
+    //Back to top botton will show on scroll offset 10.0
+    double showoffset = 10.0;
+
+    //Scrolled to top < 10.0
+    /* if (widget.scrollController.offset < showoffset) {
+      if (_scrollingProvider.showScrollbtn) {
+        _scrollingProvider.updateScrolling(false);
+      }
+    } else if (widget.scrollController.position.pixels ==
+        widget.scrollController.position.maxScrollExtent) {
+      _scrollingProvider.updateScrolling(true);
+    }
+    */
 
     if ((widget.scrollController.positions.last.extentAfter.lessThan(500)) &&
         !_isLoading) {
+      // Load more gifs
       _loadMore();
+
+      // Show scroll button
+      //   if (!_scrollingProvider.showScrollbtn) {
+      //  _scrollingProvider.updateScrolling(true);
+      // }
     }
   }
 
