@@ -64,7 +64,6 @@ class _MainViewState extends State<MainView>
   void initState() {
     super.initState();
     scrollingProvider = Provider.of<ScrollingProvider>(context, listen: false);
-    _scrollController.addListener(_scrollListener);
 
     textEditingController = new TextEditingController(
         text: Provider.of<AppBarProvider>(context, listen: false).queryText);
@@ -89,6 +88,7 @@ class _MainViewState extends State<MainView>
     );
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       // final _tabProvider = Provider.of<TabProvider>(context, listen: false);
+      //  _scrollController.addListener(_scrollListener);
     });
   }
 
@@ -100,6 +100,9 @@ class _MainViewState extends State<MainView>
   }
 
   void _scrollListener() {
+    if (!_scrollController.hasClients) {
+      return;
+    }
     double showoffset =
         10.0; //Back to top botton will show on scroll offset 10.0
 
@@ -115,7 +118,8 @@ class _MainViewState extends State<MainView>
     }
 
     */
-    if (_scrollController.offset < showoffset) {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.minScrollExtent) {
       if (scrollingProvider.showScrollbtn) {
         scrollingProvider.updateScrolling(false);
       }
@@ -127,7 +131,7 @@ class _MainViewState extends State<MainView>
 
   @override
   void dispose() {
-    _scrollController.removeListener(_scrollListener);
+    //_scrollController.removeListener(_scrollListener);
     // Dispose of resources properly
     widget.sharedPreferences.setInt("lastGiphyTabSaved", _tabController.index);
     super.dispose();
@@ -246,43 +250,64 @@ class _MainViewState extends State<MainView>
                     ),
                     SizedBox(height: 3.7),
                     Expanded(
-                      child: NestedScrollView(
-                        controller: _scrollController,
-                        floatHeaderSlivers: true,
-                        headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                          SliverToBoxAdapter(
-                              child: Container(
-                                  // duration: const Duration(milliseconds: 310),
-                                  child: Column(children: [
-                            if (widget.addMediaTopWidget != null &&
-                                textEditingController.text.isEmpty)
-                              Consumer<ScrollingProvider>(
-                                  builder: (tabProviderContext,
-                                          scrollingProvider, _) =>
-                                      AnimatedContainer(
-                                          duration:
-                                              const Duration(milliseconds: 590),
-                                          height:
-                                              scrollingProvider.scrolledToTop ==
+                      child: NotificationListener<ScrollEndNotification>(
+                          onNotification: (scrollEnd) {
+                            final metrics = scrollEnd.metrics;
+                            if (metrics.atEdge) {
+                              bool isTop = metrics.pixels == 0;
+                              if (isTop) {
+                                debugPrint('At the top');
+                                if (scrollingProvider.showScrollbtn) {
+                                  scrollingProvider.updateScrolling(false);
+                                }
+                              } else {
+                                debugPrint('At the bottom');
+                                if (!scrollingProvider.showScrollbtn) {
+                                  scrollingProvider.updateScrolling(true);
+                                }
+                              }
+                            }
+                            return true;
+                          },
+                          child: NestedScrollView(
+                            controller: _scrollController,
+                            floatHeaderSlivers: true,
+                            headerSliverBuilder:
+                                (context, innerBoxIsScrolled) => [
+                              SliverToBoxAdapter(
+                                  child: Container(
+                                      // duration: const Duration(milliseconds: 310),
+                                      child: Column(children: [
+                                if (widget.addMediaTopWidget != null &&
+                                    textEditingController.text.isEmpty)
+                                  Consumer<ScrollingProvider>(
+                                      builder: (tabProviderContext,
+                                              scrollingProvider, _) =>
+                                          AnimatedContainer(
+                                              duration: const Duration(
+                                                  milliseconds: 590),
+                                              height: scrollingProvider
+                                                              .scrolledToTop ==
                                                           true ||
                                                       scrollingProvider
                                                               .scrolledToTop ==
                                                           null
                                                   ? null
                                                   : 0,
-                                          child: widget.addMediaTopWidget!)),
-                            widget.tabBottomBuilder?.call(context) ??
-                                GiphyTabBottom(),
-                            GiphyTabBar(
-                              tabController: _tabController,
-                              showGIFs: widget.showGIFs,
-                              showStickers: widget.showStickers,
-                              showEmojis: widget.showEmojis,
-                            ),
-                          ])))
-                        ],
-                        body:
-                            /* NotificationListener<ScrollNotification>(
+                                              child:
+                                                  widget.addMediaTopWidget!)),
+                                widget.tabBottomBuilder?.call(context) ??
+                                    GiphyTabBottom(),
+                                GiphyTabBar(
+                                  tabController: _tabController,
+                                  showGIFs: widget.showGIFs,
+                                  showStickers: widget.showStickers,
+                                  showEmojis: widget.showEmojis,
+                                ),
+                              ])))
+                            ],
+                            body:
+                                /* NotificationListener<ScrollNotification>(
                       onNotification: (scrollNotification) {
                         if (scrollNotification is ScrollEndNotification) {
                           if (_scrollController.position.extentAfter == 0) {
@@ -295,15 +320,15 @@ class _MainViewState extends State<MainView>
                       },
                       child:
                       */
-                            GiphyTabView(
-                          tabController: _tabController,
-                          scrollController: _scrollController,
-                          showGIFs: widget.showGIFs,
-                          showStickers: widget.showStickers,
-                          showEmojis: widget.showEmojis,
-                        ),
-                        // ),
-                      ),
+                                GiphyTabView(
+                              tabController: _tabController,
+                              scrollController: _scrollController,
+                              showGIFs: widget.showGIFs,
+                              showStickers: widget.showStickers,
+                              showEmojis: widget.showEmojis,
+                            ),
+                            // ),
+                          )),
                     ),
                   ],
                 ),
