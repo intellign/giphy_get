@@ -288,11 +288,6 @@ class _GiphyTabDetailState extends State<GiphyTabDetail> {
         !_isLoading) {
       // Load more gifs
       _loadMore();
-
-      // Show scroll button
-      //   if (!_scrollingProvider.showScrollbtn) {
-      //  _scrollingProvider.updateScrolling(true);
-      // }
     }
   }
 
